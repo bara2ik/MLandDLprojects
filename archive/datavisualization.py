@@ -19,12 +19,10 @@ except:
 plt.ioff()
 
 # 1. Load the clean data
-if os.path.exists("cleaned_car_data.csv"):
-    df = pd.read_csv("cleaned_car_data.csv")
-    print("Loaded cleaned_car_data.csv")
-    print(f"Dataset shape: {df.shape}")
-else:
-    raise FileNotFoundError("cleaned_car_data.csv not found. Please run dataprocessing.py first!")
+os.path.exists("cleaned_car_data.csv"):
+df = pd.read_csv("cleaned_car_data.csv")
+print("Loaded cleaned_car_data.csv")
+print(f"Dataset shape: {df.shape}")
 
 
 # Set the style for professional-looking charts
