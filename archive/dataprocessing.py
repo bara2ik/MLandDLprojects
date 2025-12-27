@@ -1,9 +1,7 @@
 import pandas as pd
 import glob
 import os
-from sklearn.preprocessing import StandardScaler,OneHotEncoder
-from sklearn.compose import ColumnTransformer
-from sklearn.pipeline import Pipeline
+
 
 # --- 1. LOAD AND COMBINE ALL DATASETS ---
 # Get a list of all CSV files in the current directory (excluding cleaned_car_data.csv)
@@ -55,37 +53,10 @@ full_df['car_age'] = current_year - full_df['year']
 full_df = full_df.drop(columns=['year'])
 print(" -> Created 'car_age' column and removed 'year'.")
 
-# --- 6.Data Encoding and Scaling---
 
 
-#Separate features and target
-X = full_df.drop(columns=['price'])
-y = full_df['price']
 
-#Identify column types
-categorical_features = ['model', 'transmission', 'fuelType', 'brand']
-numerical_features = ['mileage', 'tax', 'mpg', 'engineSize', 'car_age']
-
-#Preprocessing for numerical data
-numerical_transformer = StandardScaler()
-
-#Preprocessing for categorical data
-categorical_transformer = OneHotEncoder(
-    handle_unknown='ignore',
-    sparse_output=False,
-    categorical_features=categorical_features
-)
-
-#Combine preprocessing steps
-preprocessor = ColumnTransformer(
-    transformers=[
-        ('num', numerical_transformer, numerical_features),
-        ('cat', categorical_transformer, categorical_features)
-    ]
-)
-
-
-# --- 7. SAVE AND PREVIEW ---
+# --- 6. SAVE AND PREVIEW ---
 # Save the clean data to a new CSV so you can use it later
 full_df.to_csv("cleaned_car_data.csv", index=False)
 
