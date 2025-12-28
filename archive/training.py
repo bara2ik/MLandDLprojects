@@ -6,21 +6,22 @@ from sklearn.preprocessing import OneHotEncoder, StandardScaler
 from sklearn.linear_model import LinearRegression
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
+import joblib
 
 
-# 1. LOADING THE DATA
+#  LOADING THE DATA
 df = pd.read_csv("cleaned_car_data.csv")
 
-# 2. DEFINING FEATURES (X) AND TARGET (y)
+#  DEFINING FEATURES (X) AND TARGET (y)
 X = df.drop('price', axis=1)
 y = df['price']
 
-# 3. SPLITTING THE DATA (80% Train, 20% Test)
+#  SPLITTING THE DATA (80% Train, 20% Test)
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
 print(f"Training on {len(X_train)} cars, Testing on {len(X_test)} cars.")
 
-# 4. PREPROCESSING PIPELINE
+# PREPROCESSING PIPELINE
 categorical_cols = ['brand', 'transmission', 'fuelType'] 
 numerical_cols = ['mileage', 'tax', 'mpg', 'engineSize', 'car_age']
 
@@ -46,7 +47,7 @@ rf_model.fit(X_train, y_train)
 rf_preds = rf_model.predict(X_test)
 print("   -> Done.")
 
-# --- EVALUATION FUNCTION (Now with MSE) ---
+# EVALUATION FUNCTION (Now with MSE) 
 def evaluate_model(name, y_true, y_pred):
     mae = mean_absolute_error(y_true, y_pred)
     mse = mean_squared_error(y_true, y_pred) # <--- Added MSE here
@@ -65,3 +66,8 @@ results_df = pd.DataFrame([
 print("\n--- FINAL COMPARISON RESULTS ---")
 pd.options.display.float_format = '{:,.2f}'.format 
 print(results_df)
+
+
+#  SAVING THE BEST MODEL
+print("\nSaving the best model (Random Forest) to file...")
+joblib.dump(rf_model, 'car_price_model.pkl')
